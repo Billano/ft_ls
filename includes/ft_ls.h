@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/17 05:37:42 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/17 05:59:36 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct		s_avl_tree_ls
 	struct stat f_stat;
 	// struct dirent *f_dir;
 	char *d_name;
-	long long int size;
+	long long int blocks;
 	struct s_avl_tree_ls	*right;
 	struct s_avl_tree_ls	*left;
 	int						height;

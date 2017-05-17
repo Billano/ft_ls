@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:13:47 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/17 05:42:32 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/17 06:40:03 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,13 @@ t_avl_tree_ls *ft_avl_tree_ls_create(struct dirent *f_dir, struct stat f_stat, c
 		return (0);
 	n_path =  ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name);
 	node->path = n_path;
-	// lstat(n_path, &(node->f_stat));
 	node->f_stat = f_stat;
 	node->d_name = ft_strdup(f_dir->d_name);
-	node->size = (long long)f_stat.st_size;
+	node->blocks = (long long)f_stat.st_blocks;
 	node->left = NULL;
 	node->right = NULL;
-	node->height = 1;
 	return (node);
 }
-
-// t_avl_tree_ls *ft_avl_r_rotate(t_avl_tree_ls *node)
-// {
-// 	t_avl_tree_ls *left;
-// 	t_avl_tree_ls *t_3;
-//
-//
-// }
 
 void ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
 {
@@ -101,13 +91,30 @@ t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, struct dirent *f_dir, 
 		return (ft_avl_tree_ls_create(f_dir, f_stat, path));
 	else if (ft_strcmp(root->d_name, f_dir->d_name) >= 0)
 	{
-		root->size += (long long)f_stat.st_size;
+		root->blocks += (long long)f_stat.st_blocks;
 		root->left = ft_avl_tree_ls_insert(root->left, f_dir, f_stat, path);
 	}
 	else
 	{
-		root->size += (long long)f_stat.st_size;
+		root->blocks += (long long)f_stat.st_blocks;
 		root->right = ft_avl_tree_ls_insert(root->right, f_dir,f_stat,  path);
+	}
+	return (root);
+}
+
+t_avl_tree_ls *ft_avl_tree_ls_time_insert(t_avl_tree_ls *root, struct dirent *f_dir, struct stat f_stat, char *path)
+{
+	if (!root)
+		return (ft_avl_tree_ls_create(f_dir, f_stat, path));
+	else if (root->f_stat.st_mtime < f_stat.st_mtime)
+	{
+		root->blocks += (long long)f_stat.st_blocks;
+		root->left = ft_avl_tree_ls_time_insert(root->left, f_dir, f_stat, path);
+	}
+	else
+	{
+		root->blocks += (long long)f_stat.st_blocks;
+		root->right = ft_avl_tree_ls_time_insert(root->right, f_dir,f_stat,  path);
 	}
 	return (root);
 }
@@ -127,7 +134,7 @@ t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path)
 		if (flags.a_flag || f_dir->d_name[0] != '.')
 		{
 			lstat(ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name), &f_stat);
-			root = flags.t_flag ? ft_avl_tree_ls_insert(root, f_dir, f_stat, path) : ft_avl_tree_ls_insert(root, f_dir, f_stat, path);//aqui se guarda por tiempo
+			root = flags.t_flag ? ft_avl_tree_ls_time_insert(root, f_dir, f_stat, path) : ft_avl_tree_ls_insert(root, f_dir, f_stat, path);//aqui se guarda por tiempo
 		}
 	}
 	return (root);
@@ -176,7 +183,7 @@ void ft_open_dir(char *path, t_ls_flags flags)
 	fd = opendir(path);
 	root = ft_store_dir(fd, flags, path);
 	if (flags.l_flag)
-		printf("total %lld\n", root->size);
+		printf("total %lld\n", root->blocks);
 	flags.r_flag ? ft_avl_tree_ls_backorder(root, path, flags) : ft_avl_tree_ls_inorder(root, path, flags);
 	if (flags.bigr_flag)
 	{
