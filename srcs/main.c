@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:13:47 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/16 21:30:04 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/16 22:18:07 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,14 @@ int ft_avl_height(t_avl_tree_ls *node)
 t_avl_tree_ls *ft_avl_tree_ls_create(struct dirent *f_dir, char *path)
 {
 	t_avl_tree_ls *node;
+	char *n_path;
 
 	node = 0;
 	if (!(node = (t_avl_tree_ls *)malloc(sizeof(t_avl_tree_ls))))
 		return (0);
-	// node->f_dir = NULL;
-	// node->f_stat = NULL;
-	node->path = ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name);
-	lstat(node->path, &node.f_stat);
-	// node->f_dir = f_dir;
+	n_path =  ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name);
+	node->path = n_path;
+	lstat(n_path, &(node->f_stat));
 	node->d_name = ft_strdup(f_dir->d_name);
 	node->d_namlen = f_dir->d_namlen;
 	node->left = NULL;
@@ -69,17 +68,13 @@ void ft_avl_tree_ls_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
 
 void ft_avl_tree_ls_r_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
 {
-	char *new_path;
-
-	new_path = 0;
 	if (root)
 	{
 		ft_avl_tree_ls_r_inorder(root->left, path, flags);
-		new_path = ft_strjoin(ft_strjoin(path, "/"), root->d_name);
-		if (ft_is_a_dir(new_path))
+		if (ft_is_node_a_dir(root) && ft_strcmp(".", root->d_name) && ft_strcmp("..", root->d_name))
 		{
-			printf("\n%s:\n", new_path);
-			ft_open_dir(new_path, flags);
+			printf("\n%s:\n", root->path);
+			ft_open_dir(root->path, flags);
 		}
 		ft_avl_tree_ls_r_inorder(root->right, path, flags);
 	}
@@ -87,21 +82,15 @@ void ft_avl_tree_ls_r_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
 
 void ft_avl_tree_ls_r_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
 {
-	char *new_path;
-	struct stat buf;
-
-	new_path = 0;
 	if (root)
 	{
-		ft_avl_tree_ls_backorder(root->left, path, flags);
-		new_path = ft_strjoin(ft_strjoin(path, "/"), root->d_name);
-		lstat(new_path, &buf);
-		if (S_ISDIR(buf.st_mode))
+		ft_avl_tree_ls_r_backorder(root->right, path, flags);
+		if (ft_is_node_a_dir(root) && ft_strcmp(".", root->d_name) && ft_strcmp("..", root->d_name))
 		{
-			printf("\n%s\n", new_path);
-			ft_open_dir(new_path, flags);
+			printf("\n%s:\n", root->path);
+			ft_open_dir(root->path, flags);
 		}
-		ft_avl_tree_ls_backorder(root->right, path, flags);
+		ft_avl_tree_ls_r_backorder(root->left, path, flags);
 	}
 }
 
@@ -110,9 +99,9 @@ t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, struct dirent *f_dir, 
 	if (!root)
 		return (ft_avl_tree_ls_create(f_dir, path));
 	else if (ft_strcmp(root->d_name, f_dir->d_name) >= 0)
-		root->left = ft_avl_tree_ls_insert(root->left, f_dir);
+		root->left = ft_avl_tree_ls_insert(root->left, f_dir, path);
 	else
-		root->right = ft_avl_tree_ls_insert(root->right, f_dir);
+		root->right = ft_avl_tree_ls_insert(root->right, f_dir, path);
 	return (root);
 }
 
@@ -149,6 +138,7 @@ t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path)
 // 	}
 // 	return (root);
 // }
+
 int ft_is_a_dir(char *path)
 {
 	struct stat f_stat;
@@ -156,6 +146,11 @@ int ft_is_a_dir(char *path)
 	if (lstat(path, &f_stat) == -1)
 		return (0);
 	return (S_ISDIR(f_stat.st_mode) ? 1 : 0);
+}
+
+int ft_is_node_a_dir(t_avl_tree_ls *root)
+{
+	return (S_ISDIR(root->f_stat.st_mode) ? 1 : 0);
 }
 
 void ft_open_dir(char *path, t_ls_flags flags)

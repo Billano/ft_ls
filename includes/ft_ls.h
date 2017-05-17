@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/16 21:22:11 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/16 22:17:18 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 typedef struct		s_avl_tree_ls
 {
-	// char *path;
+	char *path;
 	struct stat f_stat;
 	// struct dirent *f_dir;
 	char *d_name;
@@ -39,14 +39,13 @@ typedef struct		s_ls_flags
 	int t_flag;
 }					t_ls_flags;
 
-t_avl_tree_ls *ft_avl_tree_ls_create(struct dirent *f_dir);
-t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, struct dirent *f_dir);
+t_avl_tree_ls *ft_avl_tree_ls_create(struct dirent *f_dir, char *path);
+t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, struct dirent *f_dir, char *path);
 void ft_open_dir(char *path, t_ls_flags flags);
-t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags);
+t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path);
 void ft_avl_tree_ls_r_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags);
 void ft_avl_tree_ls_r_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flags);
+int ft_is_node_a_dir(t_avl_tree_ls *root);
 int ft_is_a_dir(char *path);
-
-
 
 #endif
