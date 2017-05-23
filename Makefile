@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/05/16 20:24:04 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/05/22 23:11:14 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,12 @@ L = ./includes/libftprintf/includes/libft/
 
 P = ./includes/libftprintf/src/
 
+
+LS += $(C)ft_flags_parser.c
+LS += $(C)ft_print_errors.c
+LS += $(C)ft_folder_validator.c
+LS += $(C)ft_str_tree_functions.c
+LS += $(C)ft_ls_data.c
 
 
 LF = $(L)btree_apply_infix.c
@@ -302,7 +308,7 @@ $(LSNAME):
 				@gcc $(CFLAG) -c $(LF) $(PF) -I includes/
 				@ar rc libftprintf.a $(OF)
 				@ranlib libftprintf.a
-				@gcc $(CFLAG) $(LS) libftprintf.a -o $(LSNAME)
+				@gcc $(CFLAG) $(LS) $(LF) $(PF) -I includes/ -o $(LSNAME)
 				@echo "$(LSNAME)" ready to be used
 
 clean:
