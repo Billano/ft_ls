@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/05/25 01:24:37 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/05/25 02:13:41 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -306,10 +306,10 @@ all: $(LSNAME)
 
 $(LSNAME):
 				@echo compiling...
-			 	@gcc $(CFLAG) -c $(LF) $(PF) -I includes/
+			 	@gcc $(CFLAG) -c $(LF) $(PF) -I ./includes/
 			 	@ar rc libftprintf.a $(OF)
 				@ranlib libftprintf.a
-				@gcc $(CFLAG) $(LS) libftprintf.a -I includes/ -o $(LSNAME)
+				@gcc $(CFLAG) $(LS) libftprintf.a -I ./includes/ -o $(LSNAME)
 				@echo "$(LSNAME)" ready to be used
 
 clean:
