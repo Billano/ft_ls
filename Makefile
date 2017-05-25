@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/05/22 23:11:14 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/05/25 01:24:37 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ C = ./srcs/
 
 LS = $(C)main.c
 
-L = ./includes/libftprintf/includes/libft/
+L = ./includes/libftprintf/src/
 
 P = ./includes/libftprintf/src/
 
@@ -31,7 +31,8 @@ LS += $(C)ft_print_errors.c
 LS += $(C)ft_folder_validator.c
 LS += $(C)ft_str_tree_functions.c
 LS += $(C)ft_ls_data.c
-
+LS += $(C)ft_ls_print_long.c
+LS += $(C)ft_permissions.c
 
 LF = $(L)btree_apply_infix.c
 LF += $(L)btree_apply_prefix.c
@@ -305,17 +306,17 @@ all: $(LSNAME)
 
 $(LSNAME):
 				@echo compiling...
-				@gcc $(CFLAG) -c $(LF) $(PF) -I includes/
-				@ar rc libftprintf.a $(OF)
+			 	@gcc $(CFLAG) -c $(LF) $(PF) -I includes/
+			 	@ar rc libftprintf.a $(OF)
 				@ranlib libftprintf.a
-				@gcc $(CFLAG) $(LS) $(LF) $(PF) -I includes/ -o $(LSNAME)
+				@gcc $(CFLAG) $(LS) libftprintf.a -I includes/ -o $(LSNAME)
 				@echo "$(LSNAME)" ready to be used
 
 clean:
 				@$(RM) $(OF)| wc -l | tr '\n' ' ' && echo files deleted
 
 fclean: clean
-				@$(RM) $(LSNAME) libftprintf.a | wc -l | tr '\n' ' ' && echo $(LSNAME) libftprintf.a deleted
+				@$(RM) $(LSNAME) | wc -l | tr '\n' ' ' && echo $(LSNAME) libftprintf.a deleted
 
 re: fclean all
 

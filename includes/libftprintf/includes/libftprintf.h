@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eurodrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/30 22:03:53 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/03/19 06:12:35 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/24 23:46:11 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFTPRINTF_H
 # define LIBFTPRINTF_H
 
-# include "libft/libft.h"
+# include "../src/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>

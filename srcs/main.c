@@ -6,17 +6,28 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:13:47 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/23 00:10:50 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/25 01:18:16 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
+// char *ft_ls_size_assign(char *n_path)
+// {
+//
+// }
+
 t_avl_tree_ls *ft_avl_tree_ls_create(t_ls_data *ls_data)
 {
 	t_avl_tree_ls *node;
 	char *n_path;
+	struct passwd *pwd;
+	struct group *group;
 
+	pwd = 0;
+	pwd = getpwuid(ls_data->f_stat.st_uid);
+	group = 0;
+	group = getgrgid(ls_data->f_stat.st_gid);
 	node = 0;
 	if (!(node = (t_avl_tree_ls *)malloc(sizeof(t_avl_tree_ls))))
 		return (0);
@@ -25,29 +36,33 @@ t_avl_tree_ls *ft_avl_tree_ls_create(t_ls_data *ls_data)
 	node->f_stat = ls_data->f_stat;
 	node->d_name = ft_strdup(ls_data->f_dir->d_name);
 	node->blocks = (long long)ls_data->f_stat.st_blocks;
-	// node->file_size_len = f;
+	node->permission = ft_file_permisions(ls_data, n_path);
+	node->link_num = ft_itoa_base((long)ls_data->f_stat.st_nlink, 10);
+	node->owner_name = ft_strdup(pwd->pw_name);
+	node->group_name =  ft_strdup(group->gr_name);
+	node->size = (node->permission[0] == 'c') ? ft_strjoin(ft_strjoin(ft_itoa_base(major(ls_data->f_stat.st_rdev), 10), ", "), ft_itoa_base(minor(ls_data->f_stat.st_rdev), 10)) : ft_itoa_base((long long)ls_data->f_stat.st_size, 10);
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
 }
 
-void ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
+void ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path, t_ls_flags flags, t_ls_permisions *ls_p)
 {
 	if (root)
 	{
-		ft_avl_tree_ls_inorder(root->left, path, flags);
-		flags.l_flag ? ft_ls_print_long(root) : ft_printf("%s\n", root->d_name);
-		ft_avl_tree_ls_inorder(root->right, path, flags);
+		ft_avl_tree_ls_inorder(root->left, path, flags, ls_p);
+		flags.l_flag ? ft_ls_print_long(root, ls_p) : ft_printf("%s\n", root->d_name);
+		ft_avl_tree_ls_inorder(root->right, path, flags, ls_p);
 	}
 }
 
-void ft_avl_tree_ls_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flags)
+void ft_avl_tree_ls_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flags, t_ls_permisions *ls_p)
 {
 	if (root)
 	{
-		ft_avl_tree_ls_backorder(root->right, path, flags);
-		flags.l_flag ? ft_ls_print_long(root) : ft_printf("%s\n", root->d_name);
-		ft_avl_tree_ls_backorder(root->left, path, flags);
+		ft_avl_tree_ls_backorder(root->right, path, flags, ls_p);
+		flags.l_flag ? ft_ls_print_long(root, ls_p) : ft_printf("%s\n", root->d_name);
+		ft_avl_tree_ls_backorder(root->left, path, flags, ls_p);
 	}
 }
 
@@ -79,41 +94,78 @@ void ft_avl_tree_ls_r_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flag
 	}
 }
 
-t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, t_ls_data *ls_data)
+t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, t_ls_data *ls_data, t_ls_permisions *ls_p)
 {
+	t_avl_tree_ls *new;
+
+	new = 0;
 	if (!root)
-		return (ft_avl_tree_ls_create(ls_data));
+	{
+		new = ft_avl_tree_ls_create(ls_data);
+		ft_permission_update(new, ls_p);
+		return (new);
+	}
 	else if (ft_strcmp(root->d_name, ls_data->f_dir->d_name) >= 0)
 	{
-		root->blocks += (long long)ls_data->f_stat.st_blocks;
-		root->left = ft_avl_tree_ls_insert(root->left, ls_data);
+		root->left = ft_avl_tree_ls_insert(root->left, ls_data, ls_p);
 	}
 	else
 	{
-		root->blocks += (long long)ls_data->f_stat.st_blocks;
-		root->right = ft_avl_tree_ls_insert(root->right, ls_data);
+		root->right = ft_avl_tree_ls_insert(root->right, ls_data, ls_p);
 	}
 	return (root);
 }
 
-t_avl_tree_ls *ft_avl_tree_ls_time_insert(t_avl_tree_ls *root, t_ls_data *ls_data)
+int ft_ls_time_compare(t_avl_tree_ls *root, t_ls_data *ls_data)
 {
-	if (!root)
-		return (ft_avl_tree_ls_create(ls_data));
-	else if (root->f_stat.st_mtime < ls_data->f_stat.st_mtime)
+	if (root->f_stat.st_mtimespec.tv_sec < ls_data->f_stat.st_mtimespec.tv_sec)
 	{
-		root->blocks += (long long)ls_data->f_stat.st_blocks;
-		root->left = ft_avl_tree_ls_time_insert(root->left, ls_data);
+		return (1);
+	}
+	if (root->f_stat.st_mtimespec.tv_sec > ls_data->f_stat.st_mtimespec.tv_sec)
+	{
+		return (0);
 	}
 	else
 	{
-		root->blocks += (long long)ls_data->f_stat.st_blocks;
-		root->right = ft_avl_tree_ls_time_insert(root->right, ls_data);
+		if (root->f_stat.st_mtimespec.tv_nsec < ls_data->f_stat.st_mtimespec.tv_nsec)
+		{
+			return (1);
+		}
+		else if (root->f_stat.st_mtimespec.tv_nsec > ls_data->f_stat.st_mtimespec.tv_nsec)
+		{
+			return (0);
+		}
+		else
+		{
+			return (ft_strcmp(root->d_name, ls_data->f_dir->d_name) >= 0) ? (1) : (0);
+		}
+	}
+}
+
+t_avl_tree_ls *ft_avl_tree_ls_time_insert(t_avl_tree_ls *root, t_ls_data *ls_data, t_ls_permisions *ls_p)
+{
+	t_avl_tree_ls *new;
+
+	new = 0;
+	if (!root)
+	{
+		new = ft_avl_tree_ls_create(ls_data);
+		ft_permission_update(new, ls_p);
+		return (new);
+	}
+	else if (ft_ls_time_compare(root, ls_data))
+	{
+		root->left = ft_avl_tree_ls_time_insert(root->left, ls_data, ls_p);
+	}
+	else
+	{
+		root->right = ft_avl_tree_ls_time_insert(root->right, ls_data, ls_p);
 	}
 	return (root);
 }
 
-t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path)
+t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path, t_ls_permisions *ls_p)
 {
 	t_avl_tree_ls *root;
 	struct dirent *f_dir;
@@ -132,7 +184,7 @@ t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path)
 			if (lstat(ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name), &f_stat) != -1)
 			{
 				ls_data = ft_ls_data_init(f_dir, f_stat, path);
-				root = flags.t_flag ? ft_avl_tree_ls_time_insert(root, ls_data) : ft_avl_tree_ls_insert(root, ls_data);//aqui se guarda por tiempo
+				root = flags.t_flag ? ft_avl_tree_ls_time_insert(root, ls_data, ls_p) : ft_avl_tree_ls_insert(root, ls_data, ls_p);//aqui se guarda por tiempo
 			}
 		}
 	}
@@ -151,6 +203,22 @@ int ft_is_a_dir(char *path)
 int ft_is_node_a_dir(t_avl_tree_ls *root)
 {
 	return (S_ISDIR(root->f_stat.st_mode) ? 1 : 0);
+}
+
+t_ls_permisions *ft_permission_init(void)
+{
+	t_ls_permisions *ls_p;
+
+	ls_p = 0;
+	if (!(ls_p = (t_ls_permisions *)malloc(sizeof(t_ls_permisions))))
+		return (NULL);
+	ls_p->permission_len = 0;
+	ls_p->link_num_len = 0;
+	ls_p->owner_name_len = 0;
+	ls_p->group_name_len = 0;
+	ls_p->size_len = 0;
+	ls_p->blocks = 0;
+	return (ls_p);
 }
 
 void ft_open_dir(char *path, t_ls_flags flags)
@@ -174,65 +242,15 @@ void ft_open_dir(char *path, t_ls_flags flags)
 		return ;
 	}
 	ls_p = ft_permission_init();
-	root = ft_store_dir(fd, flags, path);
+	root = ft_store_dir(fd, flags, path, ls_p);
 	if (flags.l_flag)
-		ft_printf("total %lld\n", root->blocks);
-	flags.r_flag ? ft_avl_tree_ls_backorder(root, path, flags) : ft_avl_tree_ls_inorder(root, path, flags);
+		ft_printf("total %lld\n", ls_p->blocks);
+	flags.r_flag ? ft_avl_tree_ls_backorder(root, path, flags, ls_p) : ft_avl_tree_ls_inorder(root, path, flags, ls_p);
 	if (flags.bigr_flag)
 	{
 		flags.r_flag ? ft_avl_tree_ls_r_backorder(root, path, flags) : ft_avl_tree_ls_r_inorder(root, path, flags);
 	}
 	closedir(fd);
-}
-
-char ft_file_type(t_avl_tree_ls *root)
-{
-	if (S_ISDIR(root->f_stat.st_mode))
-		return ('d');
-	else if (S_ISREG(root->f_stat.st_mode))
-		return ('-');
-	else if (S_ISLNK(root->f_stat.st_mode))
-		return ('l');
-	else if (S_ISCHR(root->f_stat.st_mode))
-		return ('c');
-	else if (S_ISBLK(root->f_stat.st_mode))
-		return ('b');
-	else if (S_ISFIFO(root->f_stat.st_mode))
-		return ('p');
-	else if (S_ISSOCK(root->f_stat.st_mode))
-		return ('s');
-	else
-		return ('.');
-}
-
-char *ft_file_permisions(t_avl_tree_ls *root)
-{
-	char *str;
-
-	str = ft_strnew(11);
-	str[0] = ft_file_type(root);
-	str[1] = (root->f_stat.st_mode & S_IRUSR) ? 'r' : '-';
-	str[2] = (root->f_stat.st_mode & S_IWUSR) ? 'w' : '-';
-	str[3] = (root->f_stat.st_mode & S_IXUSR) ? 'x' : '-';
-	str[4] = (root->f_stat.st_mode & S_IRGRP) ? 'r' : '-';
-	str[5] = (root->f_stat.st_mode & S_IWGRP) ? 'w' : '-';
-	str[6] = (root->f_stat.st_mode & S_IXGRP) ? 'x' : '-';
-	str[7] = (root->f_stat.st_mode & S_IROTH) ? 'r' : '-';
-	str[8] = (root->f_stat.st_mode & S_IWOTH) ? 'w' : '-';
-	str[9] = (root->f_stat.st_mode & S_IXOTH) ? 'x' : '-';
-	return (str);
-}
-
-void ft_ls_print_long(t_avl_tree_ls *root)
-{
-	struct passwd *pwd;
-	struct group *group;
-
-	pwd = 0;
-	pwd = getpwuid(root->f_stat.st_uid);
-	group = 0;
-	group = getgrgid(root->f_stat.st_gid);
-	ft_printf("%s  %ld %s  %s %lld %.12s %s\n", ft_file_permisions(root), (long)root->f_stat.st_nlink, pwd->pw_name, group->gr_name, (long long)root->f_stat.st_size, ctime(&(root->f_stat.st_mtime)) + 4, root->d_name);
 }
 
 int main(int ac, char **av)
@@ -265,3 +283,6 @@ int main(int ac, char **av)
 		ft_open_dir(".", flags);
 	return (0);
 }
+// # @gcc $(CFLAG) -c $(LF) $(PF) -I includes/
+// # @ar rc libftprintf.a $(OF)
+// # @ranlib libftprintf.a
