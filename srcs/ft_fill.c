@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_fill.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/12 03:13:47 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/25 01:18:16 by eurodrig         ###   ########.fr       */
+/*   Created: 2017/05/25 03:58:50 by eurodrig          #+#    #+#             */
+/*   Updated: 2017/05/27 21:26:46 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/ft_ls.h"
 
@@ -191,6 +192,24 @@ t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path, t_ls_permisio
 	return (root);
 }
 
+int ft_is_a_reg_file(char *path)
+{
+	struct stat f_stat;
+
+	if (lstat(path, &f_stat) == -1)
+		return (0);
+	return (S_ISREG(f_stat.st_mode) ? 1 : 0);
+}
+
+int ft_is_link(char *path)
+{
+	struct stat f_stat;
+
+	if (lstat(path, &f_stat) == -1)
+		return (0);
+	return (S_ISLNK(f_stat.st_mode) ? 1 : 0);
+}
+
 int ft_is_a_dir(char *path)
 {
 	struct stat f_stat;
@@ -243,7 +262,7 @@ void ft_open_dir(char *path, t_ls_flags flags)
 	}
 	ls_p = ft_permission_init();
 	root = ft_store_dir(fd, flags, path, ls_p);
-	if (flags.l_flag)
+	if (flags.l_flag && (ls_p->blocks || root))
 		ft_printf("total %lld\n", ls_p->blocks);
 	flags.r_flag ? ft_avl_tree_ls_backorder(root, path, flags, ls_p) : ft_avl_tree_ls_inorder(root, path, flags, ls_p);
 	if (flags.bigr_flag)
@@ -252,37 +271,3 @@ void ft_open_dir(char *path, t_ls_flags flags)
 	}
 	closedir(fd);
 }
-
-int main(int ac, char **av)
-{
-	t_ls_flags flags;
-	t_str_tree *e_files;
-	int i;
-
-	i = 1;
-	e_files = 0;
-	flags = ft_flags_init();
-	if (!ft_flags_parser(ac, av, &i, &flags))
-		return (1);
-	if (ac > 1)
-	{
-		e_files = ft_folder_validator(i, av);
-		ft_print_e_files(e_files);
-		// i = av[1][0] == '-' ? 2 : 1;
-		while (av[i])
-		{
-			if (ft_is_a_dir(av[i]) && e_files)
-				ft_printf("%s:\n", av[i]);
-			ft_open_dir(av[i], flags);
-			i++;
-		}
-		if (!av[i] && av[i - 1][0] == '-')
-			ft_open_dir(".", flags);
-	}
-	else
-		ft_open_dir(".", flags);
-	return (0);
-}
-// # @gcc $(CFLAG) -c $(LF) $(PF) -I includes/
-// # @ar rc libftprintf.a $(OF)
-// # @ranlib libftprintf.a

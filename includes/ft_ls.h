@@ -6,14 +6,14 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/24 21:16:31 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/27 21:28:38 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-# include "libftprintf/includes/libftprintf.h"
+# include "./libftprintf.h"
 #	include <dirent.h>
 #	include <sys/types.h>
 #	include <sys/stat.h>
@@ -90,6 +90,13 @@ t_ls_data *ft_ls_data_init(struct dirent *f_dir, struct stat f_stat, char *path)
 t_str_tree *ft_str_tree_create(char *data);
 t_str_tree *ft_str_tree_insert(t_str_tree *root, char *data);
 
+int ft_is_a_reg_file(char *path);
+int ft_is_link(char *path);
+
+void ft_print_open_dir(t_str_tree *root, t_ls_flags flags, char *str);
+void ft_print_reglk_files(t_str_tree *root, t_ls_flags flag, t_ls_permisions *ls_p);
+
+t_str_tree *ft_str_tree_min(t_str_tree *root);
 
 
 t_avl_tree_ls *ft_avl_tree_ls_create(t_ls_data *ls_data);

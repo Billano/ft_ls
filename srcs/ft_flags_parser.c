@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 23:04:35 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/18 23:13:34 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/25 04:07:04 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int ft_flags_update(char *str, t_ls_flags *flags)
 			flags->r_flag = 1;
 		else if (str[i] == 't')
 			flags->t_flag = 1;
+		else if (str[i] == '1')
+			;
 		else
 		{
 			ft_print_illegal_option(str[i]);

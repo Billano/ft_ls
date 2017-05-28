@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/19 00:43:33 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/23 02:10:23 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/27 21:29:02 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ t_str_tree *ft_str_tree_insert(t_str_tree *root, char *data)
 	return (root);
 }
 
+t_str_tree *ft_str_tree_min(t_str_tree *root)
+{
+	if (!root)
+		return (0);
+	if (!root->left)
+		return (root);
+	return (root->left);
+}
+
 void ft_print_e_files(t_str_tree *root)
 {
 	if (root)
@@ -43,5 +52,31 @@ void ft_print_e_files(t_str_tree *root)
 		ft_print_e_files(root->left);
 		ft_print_file_not_found(root->data);
 		ft_print_e_files(root->right);
+	}
+}
+
+
+void ft_print_reglk_files(t_str_tree *root, t_ls_flags flags, t_ls_permisions *ls_p)
+{
+	if (root)
+	{
+		ft_print_reglk_files(root->left, flags, ls_p);
+		if (ft_is_a_reg_file(root->data) || ft_is_link(root->data))
+			flags.l_flag ? ft_ls_print_long(root, ls_p) : ft_printf("%s\n", root->data);
+		ft_print_reglk_files(root->right, flags, ls_p);
+	}
+}
+
+void ft_print_open_dir(t_str_tree *root, t_ls_flags flags, char *str)
+{
+	if (root)
+	{
+		ft_print_open_dir(root->left, flags, str);
+		if (ft_strcmp(str, root->data) || root->left)
+			ft_putchar('\n');
+		if (ft_is_a_dir(root->data))
+			ft_printf("%s:\n", root->data);
+		ft_open_dir(root->data, flags);
+		ft_print_open_dir(root->right, flags, str);
 	}
 }

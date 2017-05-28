@@ -6,14 +6,14 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/30 22:03:53 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/24 23:46:11 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/25 02:34:52 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFTPRINTF_H
 # define LIBFTPRINTF_H
 
-# include "../src/libft.h"
+# include "../srcs/src/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
