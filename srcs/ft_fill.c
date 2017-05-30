@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 03:58:50 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/27 21:26:46 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/29 01:00:26 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ t_avl_tree_ls *ft_avl_tree_ls_create(t_ls_data *ls_data)
 	node = 0;
 	if (!(node = (t_avl_tree_ls *)malloc(sizeof(t_avl_tree_ls))))
 		return (0);
-	n_path =  ft_strjoin(ft_strjoin(ls_data->path, "/"), ls_data->f_dir->d_name);
+	n_path =  ft_strjoin(ft_strjoin(ls_data->path, "/"), ls_data->d_name);
 	node->path = n_path;
 	node->f_stat = ls_data->f_stat;
-	node->d_name = ft_strdup(ls_data->f_dir->d_name);
+	node->d_name = ft_strdup(ls_data->d_name);
 	node->blocks = (long long)ls_data->f_stat.st_blocks;
 	node->permission = ft_file_permisions(ls_data, n_path);
 	node->link_num = ft_itoa_base((long)ls_data->f_stat.st_nlink, 10);
@@ -106,7 +106,7 @@ t_avl_tree_ls *ft_avl_tree_ls_insert(t_avl_tree_ls *root, t_ls_data *ls_data, t_
 		ft_permission_update(new, ls_p);
 		return (new);
 	}
-	else if (ft_strcmp(root->d_name, ls_data->f_dir->d_name) >= 0)
+	else if (ft_strcmp(root->d_name, ls_data->d_name) >= 0)
 	{
 		root->left = ft_avl_tree_ls_insert(root->left, ls_data, ls_p);
 	}
@@ -139,7 +139,7 @@ int ft_ls_time_compare(t_avl_tree_ls *root, t_ls_data *ls_data)
 		}
 		else
 		{
-			return (ft_strcmp(root->d_name, ls_data->f_dir->d_name) >= 0) ? (1) : (0);
+			return (ft_strcmp(root->d_name, ls_data->d_name) >= 0) ? (1) : (0);
 		}
 	}
 }
@@ -166,6 +166,14 @@ t_avl_tree_ls *ft_avl_tree_ls_time_insert(t_avl_tree_ls *root, t_ls_data *ls_dat
 	return (root);
 }
 
+// struct dirent *ft_dir_finder(char *)
+// {
+// 	struct dirent *files;
+//
+// 	files = 0;
+//
+// }
+
 t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path, t_ls_permisions *ls_p)
 {
 	t_avl_tree_ls *root;
@@ -184,7 +192,7 @@ t_avl_tree_ls *ft_store_dir(DIR *fd, t_ls_flags flags, char *path, t_ls_permisio
 		{
 			if (lstat(ft_strjoin(ft_strjoin(path, "/"), f_dir->d_name), &f_stat) != -1)
 			{
-				ls_data = ft_ls_data_init(f_dir, f_stat, path);
+				ls_data = ft_ls_data_init(f_dir->d_name, f_stat, path);
 				root = flags.t_flag ? ft_avl_tree_ls_time_insert(root, ls_data, ls_p) : ft_avl_tree_ls_insert(root, ls_data, ls_p);//aqui se guarda por tiempo
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/27 21:28:38 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/29 01:05:14 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_ls_permisions
 typedef struct s_ls_data
 {
 	struct stat f_stat;
-	struct dirent *f_dir;
+	char *d_name;
 	char *path;
 }				t_ls_data;
 
@@ -85,7 +85,7 @@ void ft_print_file_not_found(char *file);
 void ft_print_illegal_option(char c);
 void ft_print_e_files(t_str_tree *root);
 
-t_ls_data *ft_ls_data_init(struct dirent *f_dir, struct stat f_stat, char *path);
+t_ls_data *ft_ls_data_init(char *d_name, struct stat f_stat, char *path);
 
 t_str_tree *ft_str_tree_create(char *data);
 t_str_tree *ft_str_tree_insert(t_str_tree *root, char *data);
@@ -97,6 +97,8 @@ void ft_print_open_dir(t_str_tree *root, t_ls_flags flags, char *str);
 void ft_print_reglk_files(t_str_tree *root, t_ls_flags flag, t_ls_permisions *ls_p);
 
 t_str_tree *ft_str_tree_min(t_str_tree *root);
+
+t_ls_permisions *ft_permission_init(void);
 
 
 t_avl_tree_ls *ft_avl_tree_ls_create(t_ls_data *ls_data);

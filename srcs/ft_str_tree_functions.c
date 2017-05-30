@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/19 00:43:33 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/27 21:29:02 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/29 01:01:16 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,28 @@ void ft_print_e_files(t_str_tree *root)
 
 void ft_print_reglk_files(t_str_tree *root, t_ls_flags flags, t_ls_permisions *ls_p)
 {
+	t_ls_data *ls_data;
+	char *d_name;
+	t_avl_tree_ls *p_long;
+	struct stat buff;
+
+	ls_data = 0;
+	d_name = 0;
+	p_long = 0;
 	if (root)
 	{
 		ft_print_reglk_files(root->left, flags, ls_p);
 		if (ft_is_a_reg_file(root->data) || ft_is_link(root->data))
-			flags.l_flag ? ft_ls_print_long(root, ls_p) : ft_printf("%s\n", root->data);
+		{
+			if (flags.l_flag)
+			{
+				d_name = root->data; //ft_ls_extract_name(root->data);
+				lstat(root->data, &buff);
+				ls_data = ft_ls_data_init(d_name, buff, root->data);
+				p_long = ft_avl_tree_ls_create(ls_data);
+			}
+		}
+			flags.l_flag ? ft_ls_print_long(p_long, ls_p) : ft_printf("%s\n", root->data);
 		ft_print_reglk_files(root->right, flags, ls_p);
 	}
 }
