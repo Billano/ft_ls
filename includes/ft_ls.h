@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/05 23:02:54 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 03:12:53 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,10 @@ char	ft_is_socket(char *path);
 char	ft_is_char_file(char *path);
 char	ft_is_block_file(char *path);
 char	ft_is_fifo(char *path);
-
+char *ft_symlink_dir_path(char *path);
+void		ft_print_other_files_r(t_str_tree *root, t_ls_flags flags,\
+	t_ls_permisions *ls_p);
+char	ft_is_symlink_dir(char *path);
 void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p);
 void			ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path,\
 	t_ls_flags flags, t_ls_permisions *ls_p);

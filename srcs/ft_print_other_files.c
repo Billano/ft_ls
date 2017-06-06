@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 01:26:36 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/05 21:49:34 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 02:31:50 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,16 @@ void		ft_print_other_files(t_str_tree *root, t_ls_flags flags,\
 		ft_print_other_files(root->left, flags, ls_p);
 		ft_print_other_files_helper(root, flags, ls_p);
 		ft_print_other_files(root->right, flags, ls_p);
+	}
+}
+
+void		ft_print_other_files_r(t_str_tree *root, t_ls_flags flags,\
+	t_ls_permisions *ls_p)
+{
+	if (root)
+	{
+		ft_print_other_files_r(root->right, flags, ls_p);
+		ft_print_other_files_helper(root, flags, ls_p);
+		ft_print_other_files_r(root->left, flags, ls_p);
 	}
 }

@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_flags_parser.c                                  :+:      :+:    :+:   */
+/*   ft_symlink_dir_path.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/18 23:04:35 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/06 02:13:41 by eurodrig         ###   ########.fr       */
+/*   Created: 2017/06/06 03:11:22 by eurodrig          #+#    #+#             */
+/*   Updated: 2017/06/06 03:12:27 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-char	ft_flags_parser(int ac, char **av, int *i, t_ls_flags *flags)
+char *ft_symlink_dir_path(char *path)
 {
-	if (ac > 1)
-	{
-		while (av[(*i)] && av[(*i)][0] == '-' && ft_strcmp("--", av[(*i)])\
-		&& ft_strlen(av[(*i)]) > 1)
-		{
-			if (!ft_flags_update(av[(*i)], flags))
-				return (0);
-			(*i)++;
-		}
-		if (av[(*i)] && !ft_strcmp("--", av[(*i)]))
-			(*i)++;
-	}
-	return (1);
+	char			*link;
+
+
+	link = ft_strnew(PATH_MAX);
+	readlink(path, link, PATH_MAX);
+	return (link);
 }

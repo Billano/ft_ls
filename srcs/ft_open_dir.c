@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 03:58:50 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/05 23:21:06 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 03:13:50 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ void	ft_open_dir(char *path, t_ls_flags flags)
 	fd = 0;
 	ls_p = 0;
 	if (ft_strcmp(".", path) && !ft_is_dir(path))
+	{
+		if (ft_is_symlink_dir(path))
+			ft_open_dir(ft_symlink_dir_path(path), flags);
 		return ;
+	}
 	fd = opendir(path);
 	if (!fd)
 	{

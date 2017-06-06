@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 23:09:56 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/06 00:31:36 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 03:32:43 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void ft_print_file_not_found(char *file)
 {
 	// perror("ls: ");
 	ft_putstr_fd("ls: ", 2);
-	ft_putstr_fd(file, 2);
+	ft_strlen(file) == 0 ? ft_putstr_fd("fts_open", 2) : ft_putstr_fd(file, 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 	// perror(ft_strjoin("ls: ", file));
 	// perror(": No such file or directory\n");

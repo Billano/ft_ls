@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 19:13:01 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/05 21:44:36 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 02:30:26 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	ft_param_handle(char **av, int i, t_ls_flags flags)
 	ft_store_dir_files(av, i, flags, &dir_files);
 	ft_store_other_files(av, i, flags, &other_files);
 	ls_p = ft_permission_init();
+	flags.r_flag ? ft_print_other_files_r(other_files, flags, ls_p) :\
 	ft_print_other_files(other_files, flags, ls_p);
 	if (dir_files)
 		ft_print_dir_files(dir_files, e_files, other_files, flags);

@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/06/06 00:40:07 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/06/06 03:13:18 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ LS += $(C)ft_is_fifo.c
 LS += $(C)ft_is_link.c
 LS += $(C)ft_is_reg_file.c
 LS += $(C)ft_is_socket.c
+LS += $(C)ft_is_symlink_dir.c
 LS += $(C)ft_ls_data_init.c
 LS += $(C)ft_ls_print_long.c
 LS += $(C)ft_ls_time_compare.c
@@ -60,6 +61,7 @@ LS += $(C)ft_store_other_files.c
 LS += $(C)ft_str_tree_create.c
 LS += $(C)ft_str_tree_insert.c
 LS += $(C)ft_str_tree_min.c
+LS += $(C)ft_symlink_dir_path.c
 LS += $(C)ft_time_diff_six.c
 
 LF = $(L)btree_apply_infix.c
