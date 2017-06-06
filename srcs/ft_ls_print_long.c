@@ -6,16 +6,16 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 23:58:30 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/31 03:15:22 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/05 23:19:29 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p)
+void	ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p)
 {
-	char *link;
-	int n;
+	char	*link;
+	int		n;
 
 	link = ft_strnew(PATH_MAX);
 	ft_printf("%*s ", ls_p->permission_len, root->permission);

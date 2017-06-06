@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/05 20:51:15 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/05 23:02:54 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_ls_data
 }				t_ls_data;
 
 
-
+char	ft_set_acl(char *path);
 t_ls_flags ft_flags_init(void);
 char ft_flags_parser(int ac, char **av, int *i, t_ls_flags *flags);
 char	ft_flags_update(char *str, t_ls_flags *flags);
@@ -86,7 +86,10 @@ void	ft_print_other_files(t_str_tree *root, t_ls_flags flags,\
 	t_ls_permisions *ls_p);
 void ft_print_dir_files(t_str_tree *dir_files, t_str_tree *e_files,\
 	t_str_tree *other_files, t_ls_flags flags);
-
+char	ft_assign_own_ex_p(t_ls_data *ls_data);
+char	ft_assign_group_ex_p(t_ls_data *ls_data);
+char	ft_assign_other_ex_p(t_ls_data *ls_data);
+int	ft_ls_time_compare(t_avl_tree_ls *root, t_ls_data *ls_data);
 void ft_print_open_dir_b(t_str_tree *root, t_ls_flags flags);
 char ft_is_dir(char *path);
 char ft_is_reg_file(char *path);
@@ -97,8 +100,16 @@ char	ft_is_block_file(char *path);
 char	ft_is_fifo(char *path);
 
 void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p);
-
-
+void			ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path,\
+	t_ls_flags flags, t_ls_permisions *ls_p);
+void			ft_avl_tree_ls_backorder(t_avl_tree_ls *root, char *path,\
+	t_ls_flags flags, t_ls_permisions *ls_p);
+void			ft_avl_tree_ls_r_inorder(t_avl_tree_ls *root, char *path,\
+	t_ls_flags flags);
+void			ft_avl_tree_ls_r_backorder(t_avl_tree_ls *root, char *path,\
+	t_ls_flags flags);
+t_avl_tree_ls	*ft_avl_tree_ls_time_insert(t_avl_tree_ls *root,\
+	t_ls_data *ls_data, t_ls_permisions *ls_p);
 void ft_print_file_not_found(char *file);
 void ft_print_illegal_option(char c);
 void ft_print_e_files(t_str_tree *root);
@@ -128,8 +139,8 @@ void ft_avl_tree_ls_r_backorder(t_avl_tree_ls *root, char *path, t_ls_flags flag
 int ft_is_node_a_dir(t_avl_tree_ls *root);
 
 
-void ft_permission_update(t_avl_tree_ls *root, t_ls_permisions *ls_p);
-char *ft_file_permisions(t_ls_data *ls_data, char *path);
+void ft_permissions_update(t_avl_tree_ls *root, t_ls_permisions *ls_p);
+char *ft_file_permissions(t_ls_data *ls_data, char *path);
 char ft_file_type(t_ls_data *ls_data);
 
 #endif
