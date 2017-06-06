@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 23:09:56 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/29 01:24:02 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/02 16:36:55 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 
 void ft_print_file_not_found(char *file)
 {
-	ft_printf("ls: %s: No such File or directory\n", file);
+	// perror("ls: ");
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	// perror(ft_strjoin("ls: ", file));
+	// perror(": No such file or directory\n");
+	// ft_printf("ls: %s: No such file or directory\n", file);
 }
 
 void ft_print_illegal_option(char c)
 {
-	ft_printf("ls: illegal option -- %c\n", c);
-	ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n");//"usage: ./ft_ls [-Ralrt] [file ...]\n");
+	ft_putstr_fd("ls: illegal option -- ", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("\nusage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n", 2);
 }

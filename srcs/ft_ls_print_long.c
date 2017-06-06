@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 23:58:30 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/23 22:09:51 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/05/31 03:15:22 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p)
 	ft_printf("%-*s  ", ls_p->owner_name_len, root->owner_name);
 	ft_printf("%-*s  ", ls_p->group_name_len, root->group_name);
 	ft_printf("%*s ", ls_p->size_len, root->size);
-	ft_printf("%.12s ", (ctime(&(root->f_stat.st_mtime)) + 4));
+	ft_printf("%.6s ", (ctime(&(root->f_stat.st_mtime)) + 4));
+	if (ft_time_diff_six(root->f_stat.st_mtime))
+		ft_printf(" %.4s ", (ctime(&(root->f_stat.st_mtime)) + 20));
+	else
+		ft_printf("%.5s ", (ctime(&(root->f_stat.st_mtime)) + 11));
 	ft_printf("%s", root->d_name);
 	if (root->permission[0] == 'l')
 	{

@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/23 17:09:20 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/05/26 00:48:40 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/02 01:38:40 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,42 @@ char	ft_set_acl(char *path)
 		return (' ');
 }
 
+char ft_assign_own_ex_p(t_ls_data *ls_data)
+{
+	if (!(ls_data->f_stat.st_mode & S_IXUSR) && (ls_data->f_stat.st_mode & S_ISUID))
+		return ('S');
+	else if ((ls_data->f_stat.st_mode & S_IXUSR) && (ls_data->f_stat.st_mode & S_ISUID))
+		return ('s');
+	else if ((ls_data->f_stat.st_mode & S_IXUSR))
+		return ('x');
+	else
+		return ('-');
+}
+
+char ft_assign_group_ex_p(t_ls_data *ls_data)
+{
+	if (!(ls_data->f_stat.st_mode & S_IXGRP) && (ls_data->f_stat.st_mode & S_ISGID))
+		return ('S');
+	else if ((ls_data->f_stat.st_mode & S_IXGRP) && (ls_data->f_stat.st_mode & S_ISGID))
+		return ('s');
+	else if ((ls_data->f_stat.st_mode & S_IXGRP))
+		return ('x');
+	else
+		return ('-');
+}
+
+char ft_assign_other_ex_p(t_ls_data *ls_data)
+{
+	if (ft_is_dir(ls_data->path) && !(ls_data->f_stat.st_mode & S_IXOTH) && (ls_data->f_stat.st_mode & S_ISVTX))
+		return ('T');
+	else if (ft_is_dir(ls_data->path) && (ls_data->f_stat.st_mode & S_IXOTH) && (ls_data->f_stat.st_mode & S_ISVTX))
+		return ('t');
+	else if ((ls_data->f_stat.st_mode & S_IXOTH))
+		return ('x');
+	else
+		return ('-');
+}
+
 char *ft_file_permisions(t_ls_data *ls_data, char *path)
 {
 	char *str;
@@ -60,33 +96,13 @@ char *ft_file_permisions(t_ls_data *ls_data, char *path)
 	str[0] = ft_file_type(ls_data);
 	str[1] = (ls_data->f_stat.st_mode & S_IRUSR) ? 'r' : '-';
 	str[2] = (ls_data->f_stat.st_mode & S_IWUSR) ? 'w' : '-';
-	str[3] = (ls_data->f_stat.st_mode & S_IXUSR) ? 'x' : '-';
+	str[3] = ft_assign_own_ex_p(ls_data);
 	str[4] = (ls_data->f_stat.st_mode & S_IRGRP) ? 'r' : '-';
 	str[5] = (ls_data->f_stat.st_mode & S_IWGRP) ? 'w' : '-';
-	str[6] = (ls_data->f_stat.st_mode & S_IXGRP) ? 'x' : '-';
+	str[6] = ft_assign_group_ex_p(ls_data);
 	str[7] = (ls_data->f_stat.st_mode & S_IROTH) ? 'r' : '-';
 	str[8] = (ls_data->f_stat.st_mode & S_IWOTH) ? 'w' : '-';
-	str[9] = (ls_data->f_stat.st_mode & S_IXOTH) ? 'x' : '-';
+	str[9] = ft_assign_other_ex_p(ls_data);
 	str[10] = ft_set_acl(path);
 	return (str);
-}
-
-char ft_file_type(t_ls_data *ls_data)
-{
-	if (S_ISDIR(ls_data->f_stat.st_mode))
-		return ('d');
-	else if (S_ISREG(ls_data->f_stat.st_mode))
-		return ('-');
-	else if (S_ISLNK(ls_data->f_stat.st_mode))
-		return ('l');
-	else if (S_ISCHR(ls_data->f_stat.st_mode))
-		return ('c');
-	else if (S_ISBLK(ls_data->f_stat.st_mode))
-		return ('b');
-	else if (S_ISFIFO(ls_data->f_stat.st_mode))
-		return ('p');
-	else if (S_ISSOCK(ls_data->f_stat.st_mode))
-		return ('s');
-	else
-		return ('.');
 }

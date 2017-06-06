@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/05/25 03:59:04 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/06/05 20:52:17 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,14 +26,35 @@ L = ./srcs/src/
 P = ./srcs/src/
 
 
+LS += $(C)ft_flags_init.c
 LS += $(C)ft_flags_parser.c
+LS += $(C)ft_flags_update.c
 LS += $(C)ft_print_errors.c
 LS += $(C)ft_folder_validator.c
+LS += $(C)ft_store_dir_files.c
 LS += $(C)ft_str_tree_functions.c
-LS += $(C)ft_ls_data.c
+LS += $(C)ft_ls_data_init.c
 LS += $(C)ft_ls_print_long.c
 LS += $(C)ft_permissions.c
 LS += $(C)ft_fill.c
+LS += $(C)ft_is_dir.c
+LS += $(C)ft_is_reg_file.c
+LS += $(C)ft_is_link.c
+LS += $(C)ft_is_block_file.c
+LS += $(C)ft_is_char_file.c
+LS += $(C)ft_is_socket.c
+LS += $(C)ft_is_fifo.c
+LS += $(C)ft_time_diff_six.c
+LS += $(C)ft_print_e_files.c
+LS += $(C)ft_permission_init.c
+LS += $(C)ft_file_type.c
+LS += $(C)ft_str_tree_create.c
+LS += $(C)ft_str_tree_insert.c
+LS += $(C)ft_avl_tree_ls_create.c
+LS += $(C)ft_param_handle.c
+LS += $(C)ft_print_dir_files.c
+LS += $(C)ft_print_other_files.c
+LS += $(C)ft_store_other_files.c
 
 LF = $(L)btree_apply_infix.c
 LF += $(L)btree_apply_prefix.c
