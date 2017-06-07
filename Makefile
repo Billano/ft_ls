@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/06/06 03:13:18 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/06/06 20:30:37 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ LS += $(C)ft_store_dir.c
 LS += $(C)ft_store_dir_files.c
 LS += $(C)ft_store_other_files.c
 LS += $(C)ft_str_tree_create.c
+LS += $(C)ft_str_tree_includes.c
 LS += $(C)ft_str_tree_insert.c
 LS += $(C)ft_str_tree_min.c
 LS += $(C)ft_symlink_dir_path.c

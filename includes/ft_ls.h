@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/12 03:20:21 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/06 03:12:53 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/07 03:01:49 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct		s_ls_flags
 	int a_flag:1;
 	int r_flag:1;
 	int t_flag:1;
+	int bigt_flag:1;
+	int o_flag:1;
 }					t_ls_flags;
 
 typedef struct s_ls_permisions
@@ -102,7 +104,7 @@ char *ft_symlink_dir_path(char *path);
 void		ft_print_other_files_r(t_str_tree *root, t_ls_flags flags,\
 	t_ls_permisions *ls_p);
 char	ft_is_symlink_dir(char *path);
-void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p);
+void ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p, t_ls_flags flags);
 void			ft_avl_tree_ls_inorder(t_avl_tree_ls *root, char *path,\
 	t_ls_flags flags, t_ls_permisions *ls_p);
 void			ft_avl_tree_ls_backorder(t_avl_tree_ls *root, char *path,\
@@ -116,7 +118,7 @@ t_avl_tree_ls	*ft_avl_tree_ls_time_insert(t_avl_tree_ls *root,\
 void ft_print_file_not_found(char *file);
 void ft_print_illegal_option(char c);
 void ft_print_e_files(t_str_tree *root);
-
+char ft_str_tree_includes(t_str_tree *root, char *str);
 t_ls_data *ft_ls_data_init(char *d_name, struct stat f_stat, char *path);
 
 t_str_tree *ft_str_tree_create(char *data);

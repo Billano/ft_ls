@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 18:54:49 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/02 16:31:24 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/07 02:56:12 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,7 @@ t_ls_flags	ft_flags_init(void)
 	flags.a_flag = 0;
 	flags.r_flag = 0;
 	flags.t_flag = 0;
+	flags.o_flag = 0;
+	flags.bigt_flag = 0;
 	return (flags);
 }

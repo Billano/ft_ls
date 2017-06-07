@@ -6,7 +6,7 @@
 /*   By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 19:13:01 by eurodrig          #+#    #+#             */
-/*   Updated: 2017/06/06 02:30:26 by eurodrig         ###   ########.fr       */
+/*   Updated: 2017/06/06 20:32:07 by eurodrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	ft_param_handle(char **av, int i, t_ls_flags flags)
 	dir_files = 0;
 	other_files = 0;
 	e_files = ft_folder_validator(i, av);
+	if (ft_str_tree_includes(e_files, ""))
+	{
+		ft_putstr_fd("ls: fts_open: No such file or directory\n", 2);
+		return ;
+	}
 	ft_print_e_files(e_files);
 	ft_store_dir_files(av, i, flags, &dir_files);
 	ft_store_other_files(av, i, flags, &other_files);
