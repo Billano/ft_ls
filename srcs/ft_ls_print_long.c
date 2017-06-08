@@ -26,7 +26,7 @@ static void	ft_ls_print_time(t_avl_tree_ls *root, t_ls_flags flags)
 	}
 }
 
-void	ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p,\
+void		ft_ls_print_long(t_avl_tree_ls *root, t_ls_permisions *ls_p,\
 	t_ls_flags flags)
 {
 	char	*link;

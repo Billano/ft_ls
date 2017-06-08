@@ -6,7 +6,7 @@
 #    By: eurodrig <eurodrig@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/29 17:06:20 by eurodrig          #+#    #+#              #
-#    Updated: 2017/06/06 20:30:37 by eurodrig         ###   ########.fr        #
+#    Updated: 2017/06/07 23:17:17 by eurodrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ LS += $(C)ft_str_tree_create.c
 LS += $(C)ft_str_tree_includes.c
 LS += $(C)ft_str_tree_insert.c
 LS += $(C)ft_str_tree_min.c
+LS += $(C)ft_str_tree_time_insert.c
 LS += $(C)ft_symlink_dir_path.c
 LS += $(C)ft_time_diff_six.c
 
@@ -347,7 +348,7 @@ clean:
 				@$(RM) $(OF)| wc -l | tr '\n' ' ' && echo files deleted
 
 fclean: clean
-				@$(RM) $(LSNAME) | wc -l | tr '\n' ' ' && echo $(LSNAME) libftprintf.a deleted
+				@$(RM) $(LSNAME) libftprintf.a | wc -l | tr '\n' ' ' && echo $(LSNAME) libftprintf.a deleted
 
 re: fclean all
 
